@@ -1,6 +1,6 @@
 Desarrollo web en entorno servidor
 
-# AD-1. AD-3. Trabajo en Equipo. Spring Boot Security, Jpa Eventos
+# AD-3. Trabajo en Equipo. Spring Boot Security, Jpa Eventos
 
 ## Enunciado
 
