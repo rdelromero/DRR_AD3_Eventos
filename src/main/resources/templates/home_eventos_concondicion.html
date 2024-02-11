@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/css/barra_navegacion_desplegable.css">
+</head>
+<body>
+<!-- ************************************************************************************************************ -->
+<header>
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" th:href="@{/}">Logo</a>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+         <ul  class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" th:href="@{/eventos}">Eventos<a/></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/eventos/destacados}">Destacados<a/></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/eventos/activos}">Activos<a/></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Tipo de evento</a>
+                <div class="dropdown-content">
+                    <a th:href="@{/eventos/tipo/1}">Concierto</a>
+                    <a th:href="@{/eventos/tipo/2}">Despedida<a>
+                    <a th:href="@{/eventos/tipo/3}">Cumpleaños</a>
+                    <a th:href="@{/eventos/tipo/4}">Boda</a>
+                </div>
+            </li>
+            <li sec:authorize="hasRole('ROLE_CLIENTE')" class="nav-item"><a class="nav-link" th:href="@{/misreservas}">Mis reservas<a/></li>
+            <!-- Elemento solo visible por usuarios con rol administrador (los cuales se establecen en la base de datos) -->
+            <li class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMINISTRADOR'')')}"><a class="nav-link" th:href="@{/reservas}">Lista reservas<a/></li>
+         </ul>
+      </div>  
+      <spam  sec:authentication="name"></spam>
+      <ul class="nav justify-content-end">
+         <li  sec:authorize="!isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/login}">Iniciar Sesión</a></li>
+	     <li  sec:authorize="!isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/signup}">Registrarse</a></li>
+	     <li  sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/logout}">Cerrar Sesión</a></li>	 
+      </ul>
+   </nav>
+</header>
+<!-- ************************************************************************************************************ -->
+<h4>Empresa organizadora de eventos</h4>
+<div class="container">
+
+    <h2 class="text-primary" th:text="${mensaje}"></h2>
+	<table class="table table-striped table-sm">
+	    <tr>
+		    <th>Nombre</th><th>Aforo máximo</th><th>Fecha inicio</th><th>Opciones</th>
+	    </tr>
+		<tr th:each="eve:${listaEventosPor}">
+			<td th:text="${eve.nombre}"></td>
+			<td th:text="${eve.aforoMaximo}"></td>
+			<td th:text="${eve.fechaInicio}"></td>
+			<td><a th:href="@{/eventos/detalle/{id}(id=${eve.idEvento})}" class="btn btn-success btn-sm">Ver detalle</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>

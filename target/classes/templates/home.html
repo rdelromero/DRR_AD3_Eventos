@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/css/barra_navegacion_desplegable.css">
+<style>
+
+</style>
+
+</head>
+<body>
+<!-- ************************************************************************************************************ -->
+<header>
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" th:href="@{/}">Logo</a>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+         <ul  class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" th:href="@{/eventos}">Eventos<a/></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/eventos/destacados}">Destacados<a/></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/eventos/activos}">Activos<a/></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Tipo de evento</a>
+                <div class="dropdown-content">
+                    <a th:href="@{/eventos/tipo/1}">Concierto</a>
+                    <a th:href="@{/eventos/tipo/2}">Despedida<a>
+                    <a th:href="@{/eventos/tipo/3}">Cumpleaños</a>
+                    <a th:href="@{/eventos/tipo/4}">Boda</a>
+                </div>
+            </li>
+            <li sec:authorize="hasRole('ROLE_CLIENTE')" class="nav-item"><a class="nav-link" th:href="@{/misreservas}">Mis reservas<a/></li>
+            <!-- Elemento solo visible por usuarios con rol administrador (los cuales se establecen en la base de datos) -->
+            <li class="nav-item" th:if="${#authorization.expression('hasRole(''ROLE_ADMINISTRADOR'')')}"><a class="nav-link" th:href="@{/reservas}">Lista reservas<a/></li>
+         </ul>
+      </div>  
+      <spam  sec:authentication="name"></spam>
+      <ul class="nav justify-content-end">
+         <li  sec:authorize="!isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/login}">Iniciar Sesión</a></li>
+	     <li  sec:authorize="!isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/signup}">Registrarse</a></li>
+	     <li  sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" th:href="@{/logout}">Cerrar Sesión</a></li>	 
+      </ul>
+   </nav>
+</header>
+<!-- ************************************************************************************************************ -->
+<h4>Empresa organizadora de eventos</h4>
+<span th:text="${mensaje}"></span><br>
+En la base de datos solo hay un rol cliente, de nombre de usuario "sara@fp.com" y contraseña "sarita".<br>
+En la base de datos hay varios usuarios con rol administrador. Uno de ellos tiene nombre de usuario "tomas@fp.com" y contraseña "tomasin".<br>
+Sobre la barra de navegación:<br>
+- El &lt;li&gt; de Eventos devuelve todos los eventos.<br>
+- El &lt;li&gt; de Destacados devuelve los eventos cuyo atributo destacado es "S". Puede incluir eventos con estado "CANCELADO".<br>
+- El &lt;li&gt; de Activos devuelve los eventos cuyo atributo estado es "ACTIVO".<br>
+- El &lt;li&gt; de Mis reservas solo es visto por usuarios con rol cliente, su resultado es diferente para cada cliente con y devuelve las reservas de ese cliente.<br>
+- El &lt;li&gt; de Reservas solo es visto por usuarios con rol administrador, su resultado solo es visto por rol adiministrador y devuelve todas las reservas.<br>
+- El &lt;li&gt; de Registrarse posibilita registrarse siempre que no es escoja un nombre de usuario que ya exista en la base de datos. Al registrarse se le asigna rol cliente y una vez logueado podrá hacer reservas.<br>
+Sobre realizar reservas para un evento:<br>
+- Solo pueden realizar reservas los usuarios registrados, ya sea con rol administrador, gestor o cliente.<br>
+- El button de Reservar estará disabled si el atributo estado del evento es "CANCELADO".<br>
+- Para realizar una reserva es necesario que la cantidad de entradas a adquirir sea menor o igual a la disponible.<br>
+- Cada usuario registrado solo puede adquirir hasta un máximo de 10 entradas por evento, ya sea a través de una sola reserva o a través de varias.<br>
+</body>
+</html>

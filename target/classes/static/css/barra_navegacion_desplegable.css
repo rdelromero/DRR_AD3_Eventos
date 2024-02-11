@@ -1,0 +1,15 @@
+
+/* Estilos CSS para el menú desplegable */
+.dropdown-content a {
+  display: block;
+  text-decoration: none;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 160px;
+  background-color:rgb(247,247,247);
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
